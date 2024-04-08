@@ -1,12 +1,12 @@
 [package]
-name = "whirlpool-client"
+name = "whirlpools-client"
 version = "0.2.0"
 description = "Created with Anchor"
 edition = "2018"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "whirlpool"
+name = "whirlpools_client"
 
 [features]
 no-entrypoint = []
