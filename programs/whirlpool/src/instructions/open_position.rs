@@ -5,7 +5,6 @@ use anchor_spl::token::{self, Mint, Token, TokenAccount};
 use crate::{state::*, util::mint_position_token_and_remove_authority};
 
 #[derive(Accounts)]
-#[instruction(bumps: OpenPositionBumps)]
 pub struct OpenPosition<'info> {
     #[account(mut)]
     pub funder: Signer<'info>,
@@ -44,30 +43,3 @@ pub struct OpenPosition<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-/*
-  Opens a new Whirlpool Position.
-*/
-pub fn handler(
-    ctx: Context<OpenPosition>,
-    _bumps: OpenPositionBumps,
-    tick_lower_index: i32,
-    tick_upper_index: i32,
-) -> Result<()> {
-    let whirlpool = &ctx.accounts.whirlpool;
-    let position_mint = &ctx.accounts.position_mint;
-    let position = &mut ctx.accounts.position;
-
-    position.open_position(
-        whirlpool,
-        position_mint.key(),
-        tick_lower_index,
-        tick_upper_index,
-    )?;
-
-    mint_position_token_and_remove_authority(
-        whirlpool,
-        position_mint,
-        &ctx.accounts.position_token_account,
-        &ctx.accounts.token_program,
-    )
-}

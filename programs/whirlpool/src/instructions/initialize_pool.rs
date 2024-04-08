@@ -46,33 +46,3 @@ pub struct InitializePool<'info> {
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
 }
-
-pub fn handler(
-    ctx: Context<InitializePool>,
-    _bumps: WhirlpoolBumps,
-    tick_spacing: u16,
-    initial_sqrt_price: u128,
-) -> Result<()> {
-    let token_mint_a = ctx.accounts.token_mint_a.key();
-    let token_mint_b = ctx.accounts.token_mint_b.key();
-
-    let whirlpool = &mut ctx.accounts.whirlpool;
-    let whirlpools_config = &ctx.accounts.whirlpools_config;
-
-    let default_fee_rate = ctx.accounts.fee_tier.default_fee_rate;
-
-    // ignore the bump passed and use one Anchor derived
-    let bump = *ctx.bumps.get("whirlpool").unwrap();
-
-    Ok(whirlpool.initialize(
-        whirlpools_config,
-        bump,
-        tick_spacing,
-        initial_sqrt_price,
-        default_fee_rate,
-        token_mint_a,
-        ctx.accounts.token_vault_a.key(),
-        token_mint_b,
-        ctx.accounts.token_vault_b.key(),
-    )?)
-}

@@ -41,23 +41,3 @@ pub struct InitializePositionBundle<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-pub fn handler(ctx: Context<InitializePositionBundle>) -> Result<()> {
-    let position_bundle_mint = &ctx.accounts.position_bundle_mint;
-    let position_bundle = &mut ctx.accounts.position_bundle;
-
-    position_bundle.initialize(position_bundle_mint.key())?;
-
-    let bump = *ctx.bumps.get("position_bundle").unwrap();
-
-    mint_position_bundle_token_and_remove_authority(
-        &ctx.accounts.position_bundle,
-        position_bundle_mint,
-        &ctx.accounts.position_bundle_token_account,
-        &ctx.accounts.token_program,
-        &[
-            b"position_bundle".as_ref(),
-            position_bundle_mint.key().as_ref(),
-            &[bump],
-        ],
-    )
-}
