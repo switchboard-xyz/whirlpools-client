@@ -195,7 +195,7 @@ pub fn swap(
     };
 
     // Log delta in fee growth to track pool usage over time with off-chain analytics
-    msg!("fee_growth: {}", fee_growth);
+    //msg!("fee_growth: {}", fee_growth);
 
     Ok(PostSwapUpdate {
         amount_a,
